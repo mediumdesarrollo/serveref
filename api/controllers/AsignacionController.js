@@ -31,7 +31,7 @@ module.exports = {
         return false
       })
 
-      res.send("Hello from Firebase!");
+    res.send("Hello from Firebase!");
   },
 
 
@@ -113,10 +113,10 @@ module.exports = {
     var sql2 = 'select * from  vista_asignaciones where id = $1 LIMIT 1'
     var rawResult2 = await sails.sendNativeQuery(sql2, [asignacion]);
 
-    var asg= rawResult2.rows[0]
-    var usuario = await Usuario.findOne({persona: rawResult2.rows[0].cliente})
-  
-    
+    var asg = rawResult2.rows[0]
+    var usuario = await Usuario.findOne({ persona: rawResult2.rows[0].cliente })
+    sails.sockets.blast('Received message', { data: {} });
+
     firebase.messaging().sendToDevice(usuario.fcm, {
 
       notification: {
@@ -137,6 +137,8 @@ module.exports = {
         return false
       })
 
+   
+
     res.send(rawResult);
   },
 
@@ -144,14 +146,14 @@ module.exports = {
     var asignacion = req.query.asignacion
     var sql = 'UPDATE asignacion SET aprobado = 1 WHERE id = $1 AND estado = 4 AND aprobado = 0'
     var rawResult = await sails.sendNativeQuery(sql, [asignacion]);
- 
+
     var sql2 = 'select * from  vista_asignaciones where id = $1 LIMIT 1'
     var rawResult2 = await sails.sendNativeQuery(sql2, [asignacion]);
 
-    var asg= rawResult2.rows[0]
-    var usuario = await Usuario.findOne({persona: rawResult2.rows[0].cliente})
-  
-    
+    var asg = rawResult2.rows[0]
+    var usuario = await Usuario.findOne({ persona: rawResult2.rows[0].cliente })
+    sails.sockets.blast('Received message', { data: {} });
+
     firebase.messaging().sendToDevice(usuario.fcm, {
 
       notification: {
@@ -179,6 +181,7 @@ module.exports = {
     var asignacion = req.query.asignacion
     var sql = 'UPDATE asignacion SET hora_finalizacion = $1, estado = 4 WHERE id = $2 AND estado = 2'
     var rawResult = await sails.sendNativeQuery(sql, [Date.now(), asignacion]);
+    sails.sockets.blast('Received message', { data: {} });
     res.send(rawResult);
   },
 
@@ -194,9 +197,10 @@ module.exports = {
       var sqlInsert = 'INSERT INTO pausa(hora_inicio,  asignacion, motivo) VALUES ($1, $2, $3)'
       var rawResultInsert = await sails.sendNativeQuery(sqlInsert, [Date.now(), asignacion, motivo]);
       console.log(rawResultInsert)
-
+      sails.sockets.blast('Received message', { data: {} });
       res.send(rawResultInsert)
     } else {
+      sails.sockets.blast('Received message', { data: {} });
       res.send(rawResult);
     }
   },
@@ -213,9 +217,10 @@ module.exports = {
       var sqlInsert = 'UPDATE pausa SET hora_finalizacion = $1 WHERE id=$2'
       var rawResultInsert = await sails.sendNativeQuery(sqlInsert, [Date.now(), pausa]);
       console.log(rawResultInsert)
-
+      sails.sockets.blast('Received message', { data: {} });
       res.send(rawResultInsert)
     } else {
+      sails.sockets.blast('Received message', { data: {} });
       res.send(rawResult);
     }
   }
