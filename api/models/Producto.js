@@ -7,7 +7,7 @@ module.exports = {
     nombre: { type: 'string', required: true, unique: true },
     descripcion: { type: 'string' },
     fotos: { collection: 'foto', via: 'producto' },
-    iva: { type: 'string', isIn: ['12', '0'] },
+    iva: { type: 'string'},
     ice: { type: 'string', isIn: ['NAP', 'VICE', 'PICE'] },
     pvp_manual: { type: 'boolean', defaultsTo: true },
     tipos: {
