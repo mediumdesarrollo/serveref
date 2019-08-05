@@ -177,6 +177,21 @@ module.exports = {
     res.send(rawResult);
   },
 
+  desaprobarTarea: async function (req, res) {
+    var asignacion = req.query.asignacion
+    var sql = 'UPDATE asignacion SET estado = 2 WHERE id = $1 AND estado = 4 AND aprobado = 0'
+    var rawResult = await sails.sendNativeQuery(sql, [asignacion]);
+    
+    var sql2 = 'select * from  vista_asignaciones where id = $1 LIMIT 1'
+    var rawResult2 = await sails.sendNativeQuery(sql2, [asignacion]);
+    var asg = rawResult2.rows[0]
+
+
+    var pausaCreated = await Pausa.create({hora_inicio : asg.hora_finalizacion, hora_finalizacion: Date.now(), asignacion: asignacion}).fetch();
+
+    res.send(rawResult);
+  },
+
   finalizarTarea: async function (req, res) {
     var asignacion = req.query.asignacion
     var sql = 'UPDATE asignacion SET hora_finalizacion = $1, estado = 4 WHERE id = $2 AND estado = 2'

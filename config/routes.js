@@ -20,6 +20,7 @@ module.exports.routes = {
   'get /asignacion/produccion': 'Asignacion.produccion',
   'get /asignacion/finalizadas': 'Asignacion.finalizadas',
   'get /asignacion/aprobartarea': 'Asignacion.aprobartarea',
+  'get /asignacion/desaprobartarea': 'Asignacion.desaprobartarea',
 
   'get /carrito/vista': 'Carrito.vista',
 
